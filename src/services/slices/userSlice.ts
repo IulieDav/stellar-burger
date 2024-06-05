@@ -14,6 +14,7 @@ import { setCookie } from '../../utils/cookie';
 export interface UserState {
   user: TUser | null;
   isAuthenticated: boolean;
+  loginRequest: boolean;
   isLoading: boolean;
   error: string | null;
 }
@@ -21,6 +22,7 @@ export interface UserState {
 const initialState: UserState = {
   user: null,
   isAuthenticated: false,
+  loginRequest: false,
   isLoading: false,
   error: null
 };
@@ -45,7 +47,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
+export const getUser = createAsyncThunk('user/fetchUser', async () => {
   const response = await getUserApi();
   return response.user;
 });
@@ -68,7 +70,8 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    selectUser: (state) => state.user
+    selectUser: (state) => state.user,
+    selectIsAuthChecked: (state) => state.isAuthenticated
   },
   extraReducers: (builder) => {
     builder
@@ -98,16 +101,16 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Не удалось войти';
       })
-      .addCase(fetchUser.pending, (state) => {
+      .addCase(getUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchUser.fulfilled, (state, action) => {
+      .addCase(getUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
       })
-      .addCase(fetchUser.rejected, (state, action) => {
+      .addCase(getUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error =
           action.error.message || 'Не удалось получить данные о пользователе';
@@ -134,4 +137,4 @@ const userSlice = createSlice({
 });
 
 export const userReducer = userSlice.reducer;
-export const { selectUser } = userSlice.selectors;
+export const { selectUser, selectIsAuthChecked } = userSlice.selectors;

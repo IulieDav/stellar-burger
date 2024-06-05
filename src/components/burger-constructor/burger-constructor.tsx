@@ -9,10 +9,11 @@ import {
   selectOrderIsLoading
 } from '../../services/slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
+import { createOrder } from '../../services/slices/orderSlice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const constructorItems = useSelector(selectConstructor);
+  const constructorItems = useSelector(selectConstructor).constructorItems;
   const orderRequest = useSelector(selectOrderIsLoading);
   const orderModalData = useSelector(selectOrder);
   const user = useSelector(selectUser);
@@ -25,6 +26,12 @@ export const BurgerConstructor: FC = () => {
       return;
     }
     if (!constructorItems.bun || orderRequest) return;
+    const order = [
+      constructorItems.bun._id,
+      ...constructorItems.ingredients.map(({ _id }) => _id),
+      constructorItems.bun._id
+    ];
+    dispatch(createOrder(order));
   };
   const closeOrderModal = () => {};
 

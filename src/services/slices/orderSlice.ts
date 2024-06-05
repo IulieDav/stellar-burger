@@ -10,6 +10,8 @@ import {
 export interface OrderState {
   order: TOrder | null;
   feeds: TOrder[];
+  total: number;
+  totalToday: number;
   orders: TOrder[];
   isLoading: boolean;
   error: string | null;
@@ -18,6 +20,8 @@ export interface OrderState {
 const initialState: OrderState = {
   order: null,
   feeds: [],
+  total: 0,
+  totalToday: 0,
   orders: [],
   isLoading: false,
   error: null
@@ -62,6 +66,8 @@ const orderSlice = createSlice({
       .addCase(getFeeds.fulfilled, (state, action) => {
         state.isLoading = false;
         state.feeds = action.payload.orders;
+        state.total = action.payload.total;
+        state.totalToday = action.payload.totalToday;
       })
       .addCase(getFeeds.rejected, (state, action) => {
         state.isLoading = false;
@@ -103,10 +109,21 @@ const orderSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка загрузки заказа';
       });
+  },
+  selectors: {
+    selectOrder: (state) => state.order,
+    selectOrderIsLoading: (state) => state.isLoading,
+    selectFeeds: (state) => state.feeds,
+    selectFeedsTotal: (state) => state.total,
+    selectFeedsTotalToday: (state) => state.totalToday
   }
 });
 
 export const orderReducer = orderSlice.reducer;
-export const selectOrder = (state: { order: OrderState }) => state.order.order;
-export const selectOrderIsLoading = (state: { order: OrderState }) =>
-  state.order.isLoading;
+export const {
+  selectOrder,
+  selectOrderIsLoading,
+  selectFeeds,
+  selectFeedsTotal,
+  selectFeedsTotalToday
+} = orderSlice.selectors;

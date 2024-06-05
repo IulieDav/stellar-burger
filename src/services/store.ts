@@ -12,8 +12,8 @@ import {
 const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   user: userReducer,
-  order: orderReducer,
-  constructor: constructorReducer
+  orders: orderReducer,
+  burgerConstructor: constructorReducer
 }); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({

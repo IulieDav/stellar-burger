@@ -20,13 +20,12 @@ const initialState: ConstructorState = {
 };
 
 export const constructorSlice = createSlice({
-  name: 'constructor',
+  name: 'burgerConstructor',
   initialState,
   reducers: {
     setBun(state, action: PayloadAction<TConstructorIngredient>) {
       state.constructorItems.bun = action.payload;
     },
-
     addIngredient: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         if (action.payload.type === 'bun') {
@@ -39,7 +38,10 @@ export const constructorSlice = createSlice({
         payload: { ...ingredient, id: nanoid() }
       })
     },
-    removeIngredient(state, action: PayloadAction<TConstructorIngredient>) {
+    removeIngredient: (
+      state,
+      action: PayloadAction<TConstructorIngredient>
+    ) => {
       state.constructorItems.ingredients =
         state.constructorItems.ingredients.filter(
           (ingredient) => ingredient.id !== action.payload.id
@@ -48,14 +50,36 @@ export const constructorSlice = createSlice({
     clearConstructor: (state) => {
       state.constructorItems.bun = null;
       state.constructorItems.ingredients = [];
+    },
+    moveIngredientUp: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      if (index > 0) {
+        const ingredients = state.constructorItems.ingredients;
+        const [movedItem] = ingredients.splice(index, 1);
+        ingredients.splice(index - 1, 0, movedItem);
+      }
+    },
+    moveIngredientDown: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      const ingredients = state.constructorItems.ingredients;
+      if (index < ingredients.length - 1) {
+        const [movedItem] = ingredients.splice(index, 1);
+        ingredients.splice(index + 1, 0, movedItem);
+      }
     }
   },
   selectors: {
-    selectConstructor: (state) => state.constructorItems
+    selectConstructor: (state) => state
   }
 });
 
-export const { setBun, addIngredient, removeIngredient, clearConstructor } =
-  constructorSlice.actions;
+export const {
+  setBun,
+  addIngredient,
+  removeIngredient,
+  clearConstructor,
+  moveIngredientUp,
+  moveIngredientDown
+} = constructorSlice.actions;
 export const constructorReducer = constructorSlice.reducer;
 export const { selectConstructor } = constructorSlice.selectors;
