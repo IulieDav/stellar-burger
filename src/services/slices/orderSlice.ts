@@ -6,6 +6,7 @@ import {
   getFeedsApi,
   getOrderByNumberApi
 } from '@api';
+import { clearConstructor } from './constructorSlice';
 
 export interface OrderState {
   order: TOrder | null;
@@ -39,8 +40,9 @@ export const getOrders = createAsyncThunk('orders/getOrders', async () => {
 
 export const createOrder = createAsyncThunk(
   'orders/createOrder',
-  async (ingredients: string[]) => {
+  async (ingredients: string[], { dispatch }) => {
     const order = await orderBurgerApi(ingredients);
+    dispatch(clearConstructor());
     return order;
   }
 );
@@ -56,7 +58,12 @@ export const getOrderByNumber = createAsyncThunk(
 const orderSlice = createSlice({
   name: 'orders',
   initialState,
-  reducers: {},
+  reducers: {
+    clearOrder: (state) => {
+      state.order = null;
+      state.isLoading = false;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getFeeds.pending, (state) => {
@@ -115,7 +122,8 @@ const orderSlice = createSlice({
     selectOrderIsLoading: (state) => state.isLoading,
     selectFeeds: (state) => state.feeds,
     selectFeedsTotal: (state) => state.total,
-    selectFeedsTotalToday: (state) => state.totalToday
+    selectFeedsTotalToday: (state) => state.totalToday,
+    selectOrders: (state) => state.orders
   }
 });
 
@@ -125,5 +133,7 @@ export const {
   selectOrderIsLoading,
   selectFeeds,
   selectFeedsTotal,
-  selectFeedsTotalToday
+  selectFeedsTotalToday,
+  selectOrders
 } = orderSlice.selectors;
+export const { clearOrder } = orderSlice.actions;
