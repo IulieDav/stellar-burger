@@ -5,18 +5,10 @@ import {
   updateUser,
   logoutUser,
   userReducer,
-  UserState
+  initialState
 } from './userSlice';
 
 describe('userSlice', () => {
-  const initialState: UserState = {
-    user: null,
-    isAuthenticated: false,
-    loginRequest: false,
-    isLoading: false,
-    error: null
-  };
-
   it('should handle registerUser pending', () => {
     const actualState = userReducer(
       { ...initialState },

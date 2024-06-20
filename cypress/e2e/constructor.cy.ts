@@ -2,7 +2,7 @@ describe('Burger Constructor', () => {
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
     cy.viewport(1300, 800);
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
   });
 
   it('should add bun', () => {
@@ -27,7 +27,7 @@ describe('Ingredient modal', () => {
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
     cy.viewport(1300, 800);
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
   });
 
   it('should open ingredient modal', () => {
@@ -60,7 +60,7 @@ describe('Order', () => {
       'postOrder'
     );
     cy.viewport(1300, 800);
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
 
     window.localStorage.setItem(
       'refreshToken',

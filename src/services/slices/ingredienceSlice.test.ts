@@ -1,16 +1,10 @@
 import {
   getIngredients,
   ingredientsReducer,
-  IngredientState
+  initialState
 } from './ingredienceSlice';
 
 describe('ingredientSlice', () => {
-  const initialState: IngredientState = {
-    ingredients: [],
-    isLoading: false,
-    error: null
-  };
-
   it('should handle getIngredients pending', () => {
     const actualState = ingredientsReducer(
       { ...initialState },
@@ -50,10 +44,10 @@ describe('ingredientSlice', () => {
     });
   });
   it('should handle getIngredients rejected', () => {
-    const testError = new Error('Error')
+    const testError = new Error('Error');
     const actualState = ingredientsReducer(
       { ...initialState },
-      getIngredients.rejected(testError,'')
+      getIngredients.rejected(testError, '')
     );
     expect(actualState).toEqual({
       ingredients: [],

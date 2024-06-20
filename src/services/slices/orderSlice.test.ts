@@ -4,19 +4,10 @@ import {
   createOrder,
   getOrderByNumber,
   orderReducer,
-  OrderState
+  initialState
 } from './orderSlice';
 
 describe('orderSlice', () => {
-  const initialState: OrderState = {
-    order: null,
-    feeds: [],
-    total: 0,
-    totalToday: 0,
-    orders: [],
-    isLoading: false,
-    error: null
-  };
   it('should handle getFeeds pending', () => {
     const actualState = orderReducer({ ...initialState }, getFeeds.pending(''));
     expect(actualState).toEqual({

@@ -1,23 +1,14 @@
 import {
   constructorReducer,
-  ConstructorState,
   addIngredient,
   removeIngredient,
   moveIngredientDown,
-  moveIngredientUp
+  moveIngredientUp,
+  initialState
 } from './constructorSlice';
 import { nanoid } from '@reduxjs/toolkit';
 
 describe('constructorSlice', () => {
-  const initialState: ConstructorState = {
-    constructorItems: {
-      bun: null,
-      ingredients: []
-    },
-    isLoading: false,
-    error: null
-  };
-
   const testIngredient = {
     _id: '1',
     name: 'Test Ingredient',
@@ -78,22 +69,22 @@ describe('constructorSlice', () => {
 
   it('should handle removeIngredient', () => {
     const testIngredient = {
-        ...initialState.constructorItems.ingredients[0],
-        id: nanoid()
-      };
+      ...initialState.constructorItems.ingredients[0],
+      id: nanoid()
+    };
 
     const stateWithIngredient = {
-        ...initialState,
-        constructorItems: {
-          ...initialState.constructorItems,
-          ingredients: [testIngredient]
-        }
-      };
+      ...initialState,
+      constructorItems: {
+        ...initialState.constructorItems,
+        ingredients: [testIngredient]
+      }
+    };
 
-      const actualState = constructorReducer(
-        stateWithIngredient,
-        removeIngredient(testIngredient)
-      );
+    const actualState = constructorReducer(
+      stateWithIngredient,
+      removeIngredient(testIngredient)
+    );
 
     expect(actualState.constructorItems.ingredients.length).toBe(0);
   });
@@ -112,8 +103,12 @@ describe('constructorSlice', () => {
       moveIngredientUp(1)
     );
 
-    expect(actualState.constructorItems.ingredients[0].id).toBe(testIngredients[1].id);
-    expect(actualState.constructorItems.ingredients[1].id).toBe(testIngredients[0].id);
+    expect(actualState.constructorItems.ingredients[0].id).toBe(
+      testIngredients[1].id
+    );
+    expect(actualState.constructorItems.ingredients[1].id).toBe(
+      testIngredients[0].id
+    );
   });
 
   it('should handle moveIngredientDown', () => {
@@ -130,7 +125,11 @@ describe('constructorSlice', () => {
       moveIngredientDown(0)
     );
 
-    expect(actualState.constructorItems.ingredients[0].id).toBe(testIngredients[1].id);
-    expect(actualState.constructorItems.ingredients[1].id).toBe(testIngredients[0].id);
+    expect(actualState.constructorItems.ingredients[0].id).toBe(
+      testIngredients[1].id
+    );
+    expect(actualState.constructorItems.ingredients[1].id).toBe(
+      testIngredients[0].id
+    );
   });
 });
