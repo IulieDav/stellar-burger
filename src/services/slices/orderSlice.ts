@@ -5,7 +5,7 @@ import {
   orderBurgerApi,
   getFeedsApi,
   getOrderByNumberApi
-} from '@api';
+} from '../../utils/burger-api';
 import { clearConstructor } from './constructorSlice';
 
 export interface OrderState {
@@ -18,7 +18,7 @@ export interface OrderState {
   error: string | null;
 }
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   order: null,
   feeds: [],
   total: 0,
@@ -98,7 +98,7 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orders.push(action.payload.order);
+        state.order = action.payload.order;
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.isLoading = false;

@@ -8,7 +8,7 @@ import {
   getUserApi,
   updateUserApi,
   logoutApi
-} from '@api';
+} from '../../utils/burger-api';
 import { setCookie } from '../../utils/cookie';
 
 export interface UserState {
@@ -19,7 +19,7 @@ export interface UserState {
   error: string | null;
 }
 
-const initialState: UserState = {
+export const initialState: UserState = {
   user: null,
   isAuthenticated: false,
   loginRequest: false,
